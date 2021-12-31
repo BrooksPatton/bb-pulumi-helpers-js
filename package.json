@@ -1,0 +1,17 @@
+{
+  "name": "bbbb-pulumi-helpers",
+  "version": "1.0.0",
+  "description": "Helpers when using Pulumi with JS or TS",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Brooks Patton",
+  "license": "MIT",
+  "devDependencies": {
+    "@pulumi/aws": "^4.33.0",
+    "@pulumi/pulumi": "^3.21.0",
+    "faker": "^5.5.3",
+    "jest": "^27.4.5"
+  }
+}

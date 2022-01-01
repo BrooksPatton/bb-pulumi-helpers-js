@@ -1,5 +1,5 @@
 {
-  "name": "bbbb-pulumi-helpers",
+  "name": "bb-pulumihelpers",
   "version": "1.0.0",
   "description": "Helpers when using Pulumi with JS or TS",
   "main": "index.js",
@@ -13,5 +13,6 @@
     "@pulumi/pulumi": "^3.21.0",
     "faker": "^5.5.3",
     "jest": "^27.4.5"
-  }
+  },
+  "typings": "index.d.ts"
 }

@@ -14,5 +14,8 @@
     "faker": "^5.5.3",
     "jest": "^27.4.5"
   },
-  "typings": "index.d.ts"
+  "typings": "index.d.ts",
+  "repository": {
+    "url": "https://github.com/BrooksPatton/bb-pulumi-helpers-js"
+  }
 }

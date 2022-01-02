@@ -1,7 +1,13 @@
 const { getPulumiOutputs } = require("../index");
-const { createVpc, createSubnet, createRouteTable } = require("../aws");
+const {
+  createVpc,
+  createSubnet,
+  createRouteTable,
+  createInternetGateway,
+} = require("../aws");
 const pulumi = require("@pulumi/pulumi");
 const faker = require("faker");
+const { it } = require("faker/lib/locales");
 
 const mockId = faker.datatype.uuid();
 
@@ -157,9 +163,53 @@ describe("aws", () => {
       expect(routes).toBe(undefined);
     });
 
-    test.todo("a route is set to the provided internet gateway id");
+    test("a route is set to the provided internet gateway id", async () => {
+      const vpc = createVpc("vpc", "10.0.0.0/16");
+      const internetGateway = createInternetGateway("internetGateway", vpc);
+      const routeTable = createRouteTable("route table", vpc, internetGateway);
+      const [routes, internetGatewayId] = await getPulumiOutputs([
+        routeTable.routes,
+        internetGateway.id,
+      ]);
+      expect(routes).toEqual([
+        {
+          cidrBlock: "0.0.0.0/0",
+          gatewayId: internetGatewayId,
+        },
+      ]);
+    });
 
     test("name tag is set to the resource name", () => {
+      expect(tags).toHaveProperty("Name");
+      expect(tags.Name).toBe(name);
+    });
+  });
+
+  describe("internet gateway", () => {
+    const name = "internet gateway";
+    let urn;
+    let vpcId;
+    let tags;
+
+    beforeAll(async () => {
+      const vpc = createVpc("vpc", "10.0.0.0/16");
+      const internetGateway = createInternetGateway(name, vpc);
+      [urn, vpcId, tags] = await getPulumiOutputs([
+        internetGateway.urn,
+        internetGateway.vpcId,
+        internetGateway.tags,
+      ]);
+    });
+
+    test("should have the name in the urn", () => {
+      expect(urn).toContain(name);
+    });
+
+    test("should be associated with the provided vpc", () => {
+      expect(vpcId).toBe(mockId);
+    });
+
+    test("the name tag should be set", () => {
       expect(tags).toHaveProperty("Name");
       expect(tags.Name).toBe(name);
     });
